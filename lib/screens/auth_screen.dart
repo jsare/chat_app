@@ -21,6 +21,7 @@ class _AuthScreenState extends State<AuthScreen> {
   bool _isLogin = true;
   String _enteredEmail = '';
   String _enteredPassword = '';
+  String _enteredUsername = '';
   File? _selectedImage;
   bool _isAuthenticating = false;
 
@@ -57,7 +58,7 @@ class _AuthScreenState extends State<AuthScreen> {
             .collection('users')
             .doc(userCredentials.user!.uid)
             .set({
-          'username': 'to be done ...',
+          'username': _enteredUsername,
           'email': _enteredEmail,
           'image_url': imageUrl,
         });
@@ -136,19 +137,39 @@ class _AuthScreenState extends State<AuthScreen> {
                         TextFormField(
                           decoration: const InputDecoration(
                             enabledBorder: OutlineInputBorder(),
-                            labelText: 'Password',
+                            labelText: 'Username',
                           ),
-                          obscureText: true,
+                          enableSuggestions: false,
                           validator: (value) {
-                            if (value == null || value.trim().length < 6) {
-                              return 'Password must be at least 6 characters long.';
+                            if (value == null ||
+                                value.isEmpty ||
+                                value.trim().length < 2) {
+                              return 'Please entered at least 2 characters)';
                             }
                             return null;
                           },
                           onSaved: (value) {
-                            _enteredPassword = value!;
+                            _enteredUsername = value!;
                           },
                         ),
+                        const SizedBox(height: 8),
+                        if (!_isLogin)
+                          TextFormField(
+                            decoration: const InputDecoration(
+                              enabledBorder: OutlineInputBorder(),
+                              labelText: 'Password',
+                            ),
+                            obscureText: true,
+                            validator: (value) {
+                              if (value == null || value.trim().length < 6) {
+                                return 'Password must be at least 6 characters long.';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              _enteredPassword = value!;
+                            },
+                          ),
                         const SizedBox(height: 12),
                         if (_isAuthenticating)
                           const CircularProgressIndicator(),
