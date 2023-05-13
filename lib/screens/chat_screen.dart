@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-final _firebase = FirebaseAuth.instance;
-
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
 
@@ -14,7 +12,7 @@ class ChatScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              _firebase.signOut();
+              FirebaseAuth.instance.signOut();
             },
             icon: Icon(
               Icons.logout_rounded,
